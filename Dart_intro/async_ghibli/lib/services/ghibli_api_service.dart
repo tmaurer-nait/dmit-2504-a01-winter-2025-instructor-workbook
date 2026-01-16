@@ -5,15 +5,25 @@ const endpoint = 'https://ghibliapi.vercel.app/films/';
 
 // Fetches a ghibli film given an id, and returns a decoded json representing that film
 Future<dynamic> getFilmById(String id) async {
-  // TODO: Parse the endpoint URI
+  // Error handling for any other issues
+  try {
+    // Parse the endpoint URI
+    var uri = Uri.parse('$endpoint$id');
 
-  // TODO: Fetch the data from the endpoint
+    // Fetch the data from the endpoint
+    var response = await http.get(uri);
 
-  // TODO: decode the response
+    // Error handling for status codes
+    if (response.statusCode != 200) {
+      throw Exception("Something went wrong: ${response.statusCode} received");
+    }
 
-  // TODO: return the decoded json
+    // decode the response
+    var jsonFilm = jsonDecode(response.body);
 
-  // TODO: Error handling for status codes
-
-  // TODO: Error handling for any other issues
+    // return the decoded json
+    return jsonFilm;
+  } catch (e) {
+    throw Exception("Something went wrong: $e");
+  }
 }
