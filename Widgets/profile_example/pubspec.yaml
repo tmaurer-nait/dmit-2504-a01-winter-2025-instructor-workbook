@@ -19,3 +19,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+  fonts:
+    - family: BitCountSingle
+      fonts:
+        - asset: assets/fonts/BitcountSingle-Regular.ttf
+        - asset: assets/fonts/BitcountSingle-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/BitcountSingle_Cursive-Regular.ttf
+          style: italic

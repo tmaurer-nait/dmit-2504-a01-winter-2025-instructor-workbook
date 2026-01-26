@@ -7,16 +7,28 @@ class ProfilePicture extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ClipOval(
-          child: Image(
-            height: 250,
-            width: 250,
-            image: AssetImage('assets/images/jenny_wakeman.jpg'),
+        Container(
+          width: 250,
+          height: 250,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: AssetImage('assets/images/jenny_wakeman.jpg'),
+              fit: BoxFit.fill,
+            ),
+            border: Border.all(
+              width: 4.0,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
         ),
         Text(
           'Jenny Wakeman',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ],
     );
