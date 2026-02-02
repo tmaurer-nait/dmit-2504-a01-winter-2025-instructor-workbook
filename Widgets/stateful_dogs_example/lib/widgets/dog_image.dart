@@ -14,6 +14,8 @@ class DogImage extends StatefulWidget {
 class _DogImageState extends State<DogImage> {
   // Create state variables
   var _dogImageURL = '';
+  var _likes = 0;
+  var _dislikes = 0;
 
   // Helper function that makes a fetch request to dog.ceo
   Future<String> getRandomDogURL() async {
@@ -33,6 +35,9 @@ class _DogImageState extends State<DogImage> {
       _dogImageURL = '';
     });
     getRandomDogURL().then((newImageUrl) {
+      // Include a mounted check to prevent weirdness
+      if (!mounted) return;
+
       // Make sure to call setState to trigger redraw
       setState(() {
         // Load the dog into the state
@@ -48,19 +53,51 @@ class _DogImageState extends State<DogImage> {
     getNewDog();
   }
 
+  Widget _buildImage() {
+    // This conditional render prevents exceptions while waiting on load
+    return _dogImageURL == ''
+        ? SizedBox(
+            height: 600,
+            child: Center(child: CircularProgressIndicator()),
+          )
+        : Image.network(_dogImageURL, height: 600);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // This conditional render prevents exceptions while waiting on load
-        _dogImageURL == ''
-            ? CircularProgressIndicator()
-            : Image.network(_dogImageURL, height: 500),
+        _buildImage(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'Likes: $_likes',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Dislikes: $_dislikes',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
         ElevatedButton(
           onPressed: () {
+            setState(() {
+              _likes++;
+            });
             getNewDog();
           },
-          child: Text('Fetch New Dog'),
+          child: Text('Like'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _dislikes++;
+            });
+            getNewDog();
+          },
+          child: Text('Dislike'),
         ),
       ],
     );
