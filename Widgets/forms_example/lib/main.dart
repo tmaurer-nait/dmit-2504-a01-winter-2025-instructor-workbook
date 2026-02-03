@@ -33,7 +33,6 @@ class UserSignupForm extends StatefulWidget {
 class _UserSignupFormState extends State<UserSignupForm> {
   // Create a global key that uniquely identifies the form widget
   // That way we can access it later on for validation/reset purposes
-
   // Note: this is a GlobalKey<FormState> not
   // a GlobalKey<_userSignupFormState>
   final _formKey = GlobalKey<FormState>();
@@ -50,6 +49,13 @@ class _UserSignupFormState extends State<UserSignupForm> {
     _usernameController.dispose();
     _passwordController.dispose();
     _password2Controller.dispose();
+  }
+
+  String? _isEmpty(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Password Cannot Be Empty';
+    }
+    return null;
   }
 
   @override
@@ -69,6 +75,11 @@ class _UserSignupFormState extends State<UserSignupForm> {
           TextFormField(
             decoration: InputDecoration(label: Text('Username')),
             controller: _usernameController,
+            // Validator takes a callback function that returns either a
+            // string or null. If String it's an error, if null it's valid
+            validator: (value) => (value == null || value.trim().isEmpty)
+                ? 'Username Cannot Be Empty'
+                : null,
           ),
           TextFormField(
             // Password fields should have the following properties to
@@ -78,6 +89,7 @@ class _UserSignupFormState extends State<UserSignupForm> {
             autocorrect: false,
             decoration: InputDecoration(label: Text('Password')),
             controller: _passwordController,
+            validator: _isEmpty,
           ),
           TextFormField(
             obscureText: true,
@@ -85,6 +97,15 @@ class _UserSignupFormState extends State<UserSignupForm> {
             autocorrect: false,
             decoration: InputDecoration(label: Text('Confirm Your Password')),
             controller: _password2Controller,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Password cannot be empty';
+              }
+              if (value != _passwordController.text) {
+                return 'Passwords do not match';
+              }
+              return null;
+            },
           ),
           TextButton(
             style: TextButton.styleFrom(
@@ -93,23 +114,27 @@ class _UserSignupFormState extends State<UserSignupForm> {
             ),
             onPressed: () {
               // This is where we validate and then submit
-              // TODO: Validate the form
+              // There are two ways of accessing the form
+              // Firstly you can do Form.of(context)
 
-              // If the form is valid display a snackbar. In the real world
-              // This is where you'd make the API request or whatever you do.
-              ScaffoldMessenger.of(
-                context,
-                // We will display the values the user entered instead
-                // of doing anything productive with them
-              ).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Username: ${_usernameController.text}, '
-                    'Password: ${_passwordController.text}, '
-                    'Password2: ${_password2Controller.text}',
+              // Secondly see below
+              if (_formKey.currentState!.validate()) {
+                // If the form is valid display a snackbar. In the real world
+                // This is where you'd make the API request or whatever you do.
+                ScaffoldMessenger.of(
+                  context,
+                  // We will display the values the user entered instead
+                  // of doing anything productive with them
+                ).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Username: ${_usernameController.text}, '
+                      'Password: ${_passwordController.text}, '
+                      'Password2: ${_password2Controller.text}',
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             },
             child: Text('Sign Up'),
           ),
