@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nested_nav/pages/settings/option_1.dart';
+import 'package:nested_nav/pages/settings/option_2.dart';
+import 'package:nested_nav/pages/settings/option_3.dart';
 import 'package:nested_nav/pages/settings/settings_home_page.dart';
 
 // This widget acts as a hub to route between all of our settings sub pages
@@ -28,6 +31,17 @@ class _SettingsManagerState extends State<SettingsManager> {
       case 'settings-home':
         page = SettingsHomePage();
         break;
+
+      case 'option-1':
+        page = Option1Page();
+        break;
+      case 'option-2':
+        page = Option2Page();
+        break;
+      case 'option-3':
+        page = Option3Page();
+        break;
+
       default:
         throw Exception('Unknown route used');
     }

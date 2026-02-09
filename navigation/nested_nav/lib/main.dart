@@ -23,6 +23,9 @@ class MainApp extends StatelessWidget {
           case '/':
             page = HomePage();
             break;
+          // If I wanted to I could have a more robust if statement that
+          // just looks for /settings and passes in whatever is after that as
+          // the initial route
           case '/settings/settings-home':
             page = SettingsManager(initialRoute: 'settings-home');
           default:
