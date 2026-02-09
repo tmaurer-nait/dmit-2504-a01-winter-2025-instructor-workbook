@@ -9,7 +9,8 @@ class HomePage extends StatelessWidget {
       body: Center(child: Text("This is the home page")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Route to settings page
+          // This takes us to the settings manager
+          Navigator.of(context).pushNamed('/settings/settings-home');
         },
         child: Icon(Icons.settings),
       ),

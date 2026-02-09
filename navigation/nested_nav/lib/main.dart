@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nested_nav/pages/home_page.dart';
+import 'package:nested_nav/pages/settings_manager.dart';
 
 void main() {
   runApp(const MainApp());
@@ -22,6 +23,8 @@ class MainApp extends StatelessWidget {
           case '/':
             page = HomePage();
             break;
+          case '/settings/settings-home':
+            page = SettingsManager(initialRoute: 'settings-home');
           default:
             // This is where you can handle routing to a non-existant route
             // eg. 404 not found page
