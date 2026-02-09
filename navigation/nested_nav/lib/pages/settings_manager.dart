@@ -52,6 +52,22 @@ class _SettingsManagerState extends State<SettingsManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("App Settings"),
+        leading: IconButton(
+          onPressed: () {
+            // This is the back button for all my settings pages
+            // If there is anything left in the sub-navigator stack
+            // I want to pop that. Otherwise I want to pop the main stack.
+            if (_navigatorKey.currentState!.canPop()) {
+              _navigatorKey.currentState!.pop();
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
       body: Navigator(
         key: _navigatorKey,
         onGenerateRoute: _onGenerateRoute,
