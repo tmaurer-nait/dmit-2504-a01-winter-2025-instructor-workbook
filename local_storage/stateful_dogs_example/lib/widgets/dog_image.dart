@@ -96,12 +96,25 @@ class _DogImageState extends State<DogImage> {
   }
 
   Widget _buildImage() {
+    // We now need to check on the state of the image. There are 3 cases:
+    // 1. Empty image URL -> show loading spinner
+    // 2. Local image loaded from file -> Image.file
+    // 3. Network image loaded online -> Image.network
+
+    // This will store the reference to whatever needs to be shown
+    late Widget childWidget;
+
+    if (_dogImageURL.trim().isEmpty) {
+      childWidget = CircularProgressIndicator();
+    } else if (_dogImageURL.startsWith('http')) {
+      childWidget = Image.network(_dogImageURL, height: 600);
+    } else {
+      childWidget = Image.file(File(_dogImageURL), height: 600);
+    }
+
     // This conditional render prevents exceptions while waiting on load
     return _dogImageURL == ''
-        ? SizedBox(
-            height: 600,
-            child: Center(child: CircularProgressIndicator()),
-          )
+        ? SizedBox(height: 600, child: Center(child: childWidget))
         : GestureDetector(
             onHorizontalDragEnd: (details) {
               if (details.primaryVelocity != null &&
@@ -129,7 +142,7 @@ class _DogImageState extends State<DogImage> {
               });
               getNewDog();
             },
-            child: Image.network(_dogImageURL, height: 600),
+            child: childWidget,
           );
   }
 
