@@ -52,13 +52,60 @@ class DogDbManager {
     return db;
   }
 
-  // TODO: Close DB
+  // Closes the DB Connection, and should be called in the dispose method of any widget that
+  // opens a connection to the db to prevent corruption and other issues
+  void closeDB() async {
+    // call our getter to retrieve/open the db
+    final db = await database;
+    db.close();
+    _database = null;
+  }
 
-  // TODO: Get all Dogs
+  // Get all existing dogs from the database
+  Future<List<Dog>> getDogs() async {
+    final db = await database;
 
-  // TODO: Insert Dog
+    // Queries the db for the dogs table. Returns a List<Map<String, Object?>> but we want a List<Dog>
+    // So we need to convert it to our custom model class
+    final dogMaps = await db.query('dogs');
 
-  // TODO: Delete Dog
+    // Option 1: for loop
+    // List<Dog> output = [];
+    // for (final dogMap in dogMaps) {
+    //   output.add(Dog.fromMap(dogMap));
+    // }
+    // return output;
+
+    // Option 2: List.generate
+    // return List.generate(dogMaps.length, (i) => Dog.fromMap(dogMaps[i]));
+
+    // Option 3: List comprehension
+    return [for (final dogMap in dogMaps) Dog.fromMap(dogMap)];
+  }
+
+  // Adds a dog to the DB
+  Future<void> insertDog(Dog dog) async {
+    final db = await database;
+
+    // Takes in the table name to insert to, and a map of column names to values
+    await db.insert(
+      'dogs',
+      dog.toMap(),
+      // This parameter determines how to handle inserts where the id already exists as a PRIMARY KEY.
+      // I chose to replace with the new dog
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // Deletes a Dog from the db
+  Future<void> deleteDog(int id) async {
+    final db = await database;
+
+    // THE FOLLOWING IS REALLY BAD, it opens you up to SQL injection
+    // await db.delete('dogs', where: 'id = $id');
+    // Instead we will sanitize the input utilizing whereArgs (SQFlite's built in sanitization)
+    await db.delete('dogs', where: 'id = ?', whereArgs: [id]);
+  }
 
   // TODO: Update Dog <- Student Exercise
 }
