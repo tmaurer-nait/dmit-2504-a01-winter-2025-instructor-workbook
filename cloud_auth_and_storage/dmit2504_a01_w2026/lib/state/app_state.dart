@@ -11,10 +11,13 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 // Other classes can listen for changes and respond to them
 class ApplicationState extends ChangeNotifier {
   // This class's job is to broadcast changes in firebase to the rest of the app
-  ApplicationState();
+  ApplicationState() {
+    // Call the init function to connect to firebase and setup listeners
+    init();
+  }
 
   // Boolean tracks whether or not a user is logged in
-  bool _loggedIn = true;
+  bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
   // Connects the app state to firebase auth and initializes
@@ -44,6 +47,4 @@ class ApplicationState extends ChangeNotifier {
       notifyListeners();
     });
   }
-
-  // TODO: Notify listeners of changes to loggedIn status
 }
