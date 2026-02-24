@@ -9,6 +9,23 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        // TODO: Listen to changes in app state
+        child: appState.loggedIn
+            ? ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/profile');
+                },
+                child: Text('Profile'),
+              )
+            : ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/sign-in');
+                },
+                child: Text('Sign In'),
+              ),
+      ),
+    );
   }
 }
