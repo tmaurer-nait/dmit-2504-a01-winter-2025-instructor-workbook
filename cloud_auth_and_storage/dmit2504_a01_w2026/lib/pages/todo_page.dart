@@ -12,11 +12,16 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
-  List<Todo> _todoList = [
-    Todo(description: 'Get Milk', isComplete: false),
-    Todo(description: 'Do Assignment 3', isComplete: true),
-    Todo(description: 'Plan Project', isComplete: true),
-  ];
+  List<Todo> _todoList = [];
+
+  // When I first open this page, get all the user's todos from the app state
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _todoList = widget.appState.todos ?? [];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +48,9 @@ class _TodoPageState extends State<TodoPage> {
                 value: todo.isComplete,
                 onChanged: (value) {
                   setState(() {
+                    // Update frontend
                     todo.isComplete = value!;
+                    // TODO: Update backend
                   });
                 },
               ),
@@ -51,7 +58,9 @@ class _TodoPageState extends State<TodoPage> {
             onDismissed: (direction) {
               // Direction tells me if it's left or right (in our case we don't care)
               setState(() {
+                // Update frontend
                 _todoList.removeAt(index);
+                // TODO: Update backend
               });
             },
           );

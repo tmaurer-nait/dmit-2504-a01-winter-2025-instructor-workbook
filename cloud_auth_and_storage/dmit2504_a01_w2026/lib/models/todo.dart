@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Todo {
   bool isComplete;
   String description;
@@ -6,4 +8,19 @@ class Todo {
   String? id;
 
   Todo({required this.isComplete, required this.description, this.id});
+
+  // factory constructor to convert from firebase snapshot to Todo
+  factory Todo.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    return Todo(
+      description: data!['description'],
+      isComplete: data['isComplete'],
+      id: snapshot.id,
+    );
+  }
+
+  // function that turns Todo into a Map that firestore can accept
+  Map<String, dynamic> toMap() {
+    return {'description': description, 'isComplete': isComplete};
+  }
 }

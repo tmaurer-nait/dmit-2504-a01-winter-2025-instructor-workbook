@@ -1,7 +1,11 @@
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:dmit2504_a01_w2026/firebase_options.dart';
+import 'package:dmit2504_a01_w2026/models/todo.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 // I hide email auth provider to prevent import collisions between this and
 // firebase ui auth above
@@ -30,6 +34,47 @@ class ApplicationState extends ChangeNotifier {
     _user = user;
   }
 
+  // Because we've combined communication with app state we are going to add
+  // all of our todo CRUD operations to the app state file
+
+  // Variable that tracks the logged in user's todos
+  List<Todo>? _todos;
+  List<Todo>? get todos {
+    if (user == null) {
+      throw StateError('Cannot get todos when user is null');
+    }
+    return _todos;
+  }
+
+  set todos(List<Todo>? todos) {
+    if (user == null) {
+      throw StateError('Cannot set todos when user is null');
+    }
+    if (todos == null) {
+      throw ArgumentError('Cannot set todos to null');
+    }
+    _todos = todos;
+  }
+
+  void _fetchTodos() {
+    if (user == null) {
+      throw StateError('Cannot get todos when user is null');
+    }
+
+    // First access the firestore instance
+    FirebaseFirestore.instance
+        // Then get the specific collection we need
+        .collection('todos/${user!.uid}/todos')
+        .get()
+        .then((collectionSnapshot) {
+          // Then set the app state to that List of Todos
+          todos = collectionSnapshot.docs
+              // convert every document into a Todo
+              .map((doc) => Todo.fromFirestore(doc))
+              .toList();
+        });
+  }
+
   // Connects the app state to firebase auth and initializes
   // firebase connection to the app itself
   Future<void> init() async {
@@ -53,6 +98,8 @@ class ApplicationState extends ChangeNotifier {
         _loggedIn = true;
         // When they log in, track the user that has logged in
         this.user = user;
+        // Once we've logged in as a user, preload their todos for later access
+        _fetchTodos();
       }
       // Once we have updated our state variables notify any listeners
       // This function is built in to the ChangeNotifier class that we extended
