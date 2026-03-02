@@ -18,6 +18,7 @@ class HomePage extends StatelessWidget {
           builder: (context, _) {
             return appState.loggedIn
                 ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                         onPressed: () {
