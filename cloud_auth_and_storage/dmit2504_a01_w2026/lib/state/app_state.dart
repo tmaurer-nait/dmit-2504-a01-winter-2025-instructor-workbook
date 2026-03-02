@@ -75,6 +75,36 @@ class ApplicationState extends ChangeNotifier {
         });
   }
 
+  void updateTodo(Todo todo) {
+    if (user == null) {
+      throw StateError('Cannot get todos when user is null');
+    }
+
+    // Access firestore instance
+    FirebaseFirestore.instance
+        // access the collection
+        .collection('/todos/${user!.uid}/todos')
+        // access the document
+        .doc(todo.id)
+        // update the document
+        .update(todo.toMap());
+  }
+
+  void deleteTodo(Todo todo) {
+    if (user == null) {
+      throw StateError('Cannot get todos when user is null');
+    }
+
+    FirebaseFirestore.instance
+        .collection('/todos/${user!.uid}/todos')
+        .doc(todo.id)
+        .delete()
+        // Once deleted in firestore update the appState
+        .then((_) {
+          todos!.remove(todo);
+        });
+  }
+
   // Connects the app state to firebase auth and initializes
   // firebase connection to the app itself
   Future<void> init() async {

@@ -50,7 +50,8 @@ class _TodoPageState extends State<TodoPage> {
                   setState(() {
                     // Update frontend
                     todo.isComplete = value!;
-                    // TODO: Update backend
+                    // Update backend
+                    widget.appState.updateTodo(todo);
                   });
                 },
               ),
@@ -60,7 +61,8 @@ class _TodoPageState extends State<TodoPage> {
               setState(() {
                 // Update frontend
                 _todoList.removeAt(index);
-                // TODO: Update backend
+                // Update backend
+                widget.appState.deleteTodo(todo);
               });
             },
           );
