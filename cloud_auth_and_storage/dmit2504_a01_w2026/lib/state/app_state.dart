@@ -20,6 +20,16 @@ class ApplicationState extends ChangeNotifier {
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
+  // Variable that tracks the currently signed in user
+  User? _user;
+  User? get user => _user;
+  set user(User? user) {
+    if (user == null) {
+      throw ArgumentError('Cannot set user to null');
+    }
+    _user = user;
+  }
+
   // Connects the app state to firebase auth and initializes
   // firebase connection to the app itself
   Future<void> init() async {
@@ -41,6 +51,8 @@ class ApplicationState extends ChangeNotifier {
       } else {
         // Otherwise they logged in and user is not null
         _loggedIn = true;
+        // When they log in, track the user that has logged in
+        this.user = user;
       }
       // Once we have updated our state variables notify any listeners
       // This function is built in to the ChangeNotifier class that we extended

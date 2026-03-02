@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dmit2504_a01_w2026/pages/home_page.dart';
+import 'package:dmit2504_a01_w2026/pages/todo_page.dart';
 import 'package:dmit2504_a01_w2026/state/app_state.dart';
 
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -70,6 +71,26 @@ class MainApp extends StatelessWidget {
             }),
           ],
         ),
+      },
+      // This is checked after the routes argument
+      // 1. home
+      // 2. routes
+      // 3. onGenerateRoute
+      onGenerateRoute: (settings) {
+        if (settings.name == '/todos') {
+          // Perform an auth check to protect the todos page
+          if (applicationState.loggedIn) {
+            return MaterialPageRoute(
+              builder: (context) => TodoPage(appState: applicationState),
+            );
+          } else {
+            return MaterialPageRoute(
+              builder: (context) => HomePage(appState: applicationState),
+            );
+          }
+        }
+        // By default here we should have some form of 404 page
+        return null;
       },
     );
   }
