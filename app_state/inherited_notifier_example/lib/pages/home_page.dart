@@ -4,7 +4,7 @@ import 'first_name_page.dart';
 import 'last_name_page.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
