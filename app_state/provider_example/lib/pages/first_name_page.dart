@@ -1,31 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider_example/models/user.dart';
 
 class FirstNamePage extends StatelessWidget {
   const FirstNamePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('First Name Page'),
-      ),
-      body: const Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 24.0,
+    // Wrap this scaffold in a consumer so that we can access the app state
+    // The subtype of the consumer tells us which provider to use
+    return Consumer<User>(
+      // Whenever the provider's user changes we call this build method with the
+      // new user values
+      builder: (context, user, _) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('First Name Page')),
+          body: Center(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 24.0),
+                // I don't need a listenable builder anymore, because the
+                // consumer does the listening for me
+                Text('User name: ${user.firstName} ${user.lastName}'),
+              ],
             ),
-            Text('User name: USER_NAME HERE'),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        // Update our user firs name here
-        onPressed: () {
-          //noop;
-        },
-        child: const Icon(Icons.update),
-      ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            // Update our user firs name here
+            onPressed: () {
+              user.firstName = 'Enrique';
+            },
+            child: const Icon(Icons.update),
+          ),
+        );
+      },
     );
   }
 }
