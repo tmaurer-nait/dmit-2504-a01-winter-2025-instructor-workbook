@@ -34,7 +34,9 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 24.0),
             ElevatedButton(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const LastNamePage()),
+                MaterialPageRoute(
+                  builder: (context) => LastNamePage(user: user),
+                ),
               ),
               child: const Text('Last Name Page'),
             ),
