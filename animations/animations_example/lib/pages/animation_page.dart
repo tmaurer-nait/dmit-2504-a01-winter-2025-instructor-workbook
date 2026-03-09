@@ -1,3 +1,4 @@
+import 'package:animations_example/widgets/rainbow_button.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -88,6 +89,7 @@ class _AnimationPageState extends State<AnimationPage>
                 );
               },
             ),
+            RainbowButton(child: Text('Button')),
           ],
         ),
       ),
