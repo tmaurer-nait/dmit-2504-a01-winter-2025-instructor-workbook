@@ -69,6 +69,9 @@ class _AnimationPageState extends State<AnimationPage>
                   child: Text('Tween Rotation'),
                 );
               },
+              onEnd: () => setState(() {
+                _endVal = _endVal == 0 ? 2 * math.pi : 0;
+              }),
             ),
             SizedBox(height: 100),
             RotationTransition(
