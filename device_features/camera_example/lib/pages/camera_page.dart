@@ -1,3 +1,4 @@
+import 'package:camera_example/pages/photos_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
@@ -69,7 +70,18 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Button to get to the photos page
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => PhotosPage()));
+            },
+            icon: Icon(Icons.photo),
+          ),
+        ],
+      ),
       // Camera preview
       body: Center(child: Expanded(child: CameraPreview(_camController))),
       // Take a picture button
