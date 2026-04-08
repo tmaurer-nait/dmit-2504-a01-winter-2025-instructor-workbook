@@ -26,18 +26,16 @@ class _AnimationPageState extends State<AnimationPage>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 3),
-    );
+    )..repeat();
 
     _animation = _controller.drive(CurveTween(curve: Curves.elasticOut));
-
-    _controller.repeat();
   }
 
   @override
   void dispose() {
-    super.dispose();
-
     _controller.dispose(); // Prevent memory leaks
+
+    super.dispose();
   }
 
   @override
